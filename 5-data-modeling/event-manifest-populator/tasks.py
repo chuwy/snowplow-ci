@@ -23,7 +23,7 @@ import boto.emr
 from boto.emr.step import JarStep
 
 DIR_WITH_JAR = "./target/scala-2.11/"
-JAR_FILE  = "event-manifest-populator-0.1.0.jar"
+JAR_FILE  = "event-manifest-populator-0.1.0-rc1.jar"
 
 S3_REGIONS = { 'us-east-1': Location.DEFAULT,
                'us-west-1': Location.USWest,
@@ -100,7 +100,8 @@ def run_emr(ctx, enriched_archive, storage_config, resolver, since=None, log_pat
         "--class",
         "com.snowplowanalytics.snowplow.eventpopulator.Main",
 
-        "s3://snowplow-hosted-assets/5-data-modeling/event-manifest-populator/" + JAR_FILE,
+        "s3://cross-batch-test/jars/" + JAR_FILE,   # TODO: remove
+        # "s3://snowplow-hosted-assets/5-data-modeling/event-manifest-populator/" + JAR_FILE,
 
         "--enriched-archive",
         enriched_archive,
