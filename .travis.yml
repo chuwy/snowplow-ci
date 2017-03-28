@@ -15,6 +15,10 @@ script:
 - cd ../..
 env:
   global:
+  # AWS_ACCESS_KEY sandbox
+  - secure: "hnX51XwcYVFkmlilAmMc82i5IW3lqgay8erzfatqGup+Dm04cWX/u2FVZ5U1K7d+SIV4FoEmOpI0B4Jwg/oCb3MNkKP1VSHVIiSmZDfljPlAxP/DOYnwJRcDk+M5Ae7S3UnKZL2UlL8bwtig9VpucZ0M357xETDxk8p0NPZdDdP9XDT84iirwcZEs7DX7piWKOhVnqOjSFzBlNIQzyjfRUPfQF8Y0KB9t9aWbDbOxlpEYg1ZtP1c1GtHzGqR75Ea5d1G6LaMu5VAOsjGMbdFYJ6veAlt7M1+be5aLktIXzCh9U4onxhGiW9GZKthNueYeeV+Nd/NegU9piEQhRUETuy4SWPvK0189UGZBnUa50eEn0Odz6XmjagffI9lT0/OyZd8aKNKMIyHI9X7zx+8xUePKZNpnAQ+fZ6br44YgAD23iSXsKg49yDw5KgIdcbDy4/pbNiUprXHBU+FIC9kDxTa3rasAmEFoUbZhbmVue/FLgzb+zq3ojoLcFJmYRKzoOkoWSu5q+YVPMucVGr2b+e7BbCEN7VXb8NoRa476WknKMmvt1vWxR8ztOcdj7W9TK6WmVtI8D1IMAHbSecljFqlh9VK5gK1emad9AQ+PP7uiCWz3j41j2sfMAoNIPKjjqB/e5N6+t71eXHKsi29acWGrNEace25Ot+OIOO5RKs="
+  # AWS_SECRET_KEY sandbox
+  - secure: "rTPB8+prGjNcPcFUoj4+Fw5taULJhbeLnZvWrREYc1m0XRl7Cb1i6s7O2nJlQf0+TkZtO9jHZ3tlDKrcZFsW18IPTDUzw1CvahCmaTHWFyI9D+WoZKUuDqTpBMCY/vo5/Ckq0krOTbOExvEpr4kgO30T2yNzT5lcMXeG8knbxZ1dcoYdgLkgVa4+iNyVmvDDM9P6pm86PDw/M3CYYFd4P/+wstk0epo4aw7Wtm8n1Znrkz1igp3MqfAaFVReBZpEYAy3TcTT/ueHxqhzV4kb0F6W+4JAFUWrY/+wxXoIxQqYE0+xvzvyq3WbvCqxvON8oStSRDfQVA23Ua6459YSp5qwLxDL9Os1bx8NVA902YmT7mPFXYC5cnwQNP2MrXDdSUzKDZTnH7MbyI0jJuhLQpAHwjegdmK6xLU3FNj22v9jqmlXbYtaRhSGSbj38GaOcUGLHLzf/noThzX4BsT0p2hr8epbqOSxuTnDTuJOTaKRrHDDreSLCFug7pIGmpFd8CbYI7tLB8G/kPNyfkLpHRIdkIJjdwX5wYPrs40/ErZVbr/CcOubLHyxeZcfE5YSr8wTg9rlUarMUSrRU3FaFGnxxAThbSBNjOFMvvbcPYk7EHw1MRzB2qPSLv8J3mqF8UtESj2leGgbyi6EGOx5e3i9iLqZ+RKsribpoUHP4fU="
 before_install:
 - pip install --user awscli
 - export PATH=$PATH:$HOME/.local/bin
@@ -23,35 +27,35 @@ addons:
 services:
 - postgresql
 before_deploy:
-  - pip install --user release-manager==0.2.0
+- pip install --user release-manager==0.2.0
 deploy:
-  - provider: script
-    script: ./.travis/deploy_kinesis.sh $TRAVIS_TAG
-    skip_cleanup: true
-    on:
-      tags: true
-      condition: '"$(.travis/is_kinesis_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
-  - provider: script
-    script: ./.travis/deploy_hadoop_enrich.sh $TRAVIS_TAG
-    skip_cleanup: true
-    on:
-      tags: true
-      condition: '"$(.travis/is_hadoop_enrich_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
-  - provider: script
-    script: ./.travis/deploy_hadoop_shred.sh $TRAVIS_TAG
-    skip_cleanup: true
-    on:
-      tags: true
-      condition: '"$(.travis/is_hadoop_shred_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
-  - provider: script
-    script: ./.travis/deploy_hadoop_enrich.sh $TRAVIS_TAG
-    skip_cleanup: true
-    on:
-      tags: true
-      condition: '"$(.travis/is_hadoop_event_recovery_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
-  - provider: script
-    script: ./.travis/deploy_emr.sh $TRAVIS_TAG
-    skip_cleanup: true
-    on:
-      tags: true
-      condition: '"$(.travis/is_emr_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
+- provider: script
+  script: ./.travis/deploy_kinesis.sh $TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: '"$(.travis/is_kinesis_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
+- provider: script
+  script: ./.travis/deploy_hadoop_enrich.sh $TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: '"$(.travis/is_hadoop_enrich_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
+- provider: script
+  script: ./.travis/deploy_hadoop_shred.sh $TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: '"$(.travis/is_hadoop_shred_release_tag.sh $TRAVIS_TAG)" == "" && $?  == 0'
+- provider: script
+  script: ./.travis/deploy_hadoop_enrich.sh $TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: '"$(.travis/is_hadoop_event_recovery_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
+- provider: script
+  script: ./.travis/deploy_emr.sh $TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: '"$(.travis/is_emr_release_tag.sh $TRAVIS_TAG)" == "" && $? == 0'
